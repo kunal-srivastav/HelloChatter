@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Base_url } from "../../utils/extraReducers";
+import { Base_url } from "../../utils/extraReducers.jsx";
 import axios from "axios";
 
 
