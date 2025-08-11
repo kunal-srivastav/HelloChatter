@@ -8,15 +8,6 @@ cloudinary.config({
     secure: true
 });
 
-(async () => {
-  try {
-    const result = await cloudinary.api.ping();
-    console.log("✅ API Secret is valid!", result);
-  } catch (error) {
-    console.error("❌ API Secret mismatch:", error.message);
-  }
-})();
-
 export const uploadOnCloudinary = async (localFilePath) => {
     try {
         if(!localFilePath) return null;
