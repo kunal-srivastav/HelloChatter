@@ -26,6 +26,7 @@ export const registerUser = async (req, res) => {
         })
 
     } catch (err) {
+      console.log(err);
         return res.status(500).json({message : `Internal server error`});
     }
 };
@@ -128,8 +129,7 @@ export const updateProfile = async (req, res) => {
       updatedUser: newUser
     });
   } catch (error) {
-    console.error("Update profile error:", error);
-    return res.status(500).json({ message: "Something went wrong", updateProfile });
+    return res.status(500).json({ message: "Something went wrong"});
   }
 };
 
