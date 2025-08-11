@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Base_url } from "../../utils/extraReducers";
 import axios from "axios";
-if (!Base_url) {
-  console.warn("Warning: BASE_URL is undefined or empty!");
-}
+
+
+console.log("Base_ ufur", Base_url);
 
 export const registerUser = createAsyncThunk("/users/register", 
     async(userData , {rejectWithValue}) => {
