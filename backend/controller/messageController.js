@@ -77,7 +77,7 @@ export const sendMessage = async (req, res) => {
         if(videoLocalFilePath) {
             video = await uploadOnCloudinary(videoLocalFilePath);
         };
-        const newMessage = await messageModel.create({text: text, image: image?.url, video: video?.url, senderId, receiverId});
+        const newMessage = await messageModel.create({text: text, image: image?.secure_url, video: video?.secure_url, senderId, receiverId});
         const message = await messageModel.findById(newMessage._id).populate("senderId", "avatar createdAt fullName")
         const receiverSocketId = userSocketMap.get(receiverId);
         if(receiverSocketId) {

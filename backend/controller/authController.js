@@ -1,6 +1,7 @@
 import userModel from "../models/userModel.js";
 import { deleteImgOnCloudinary, uploadOnCloudinary } from "../utlis/cloudinary.js";
 import { generateAccessAndRefreshToken} from "../middelware/generateTokens.js"
+import { cookieOptions } from "../utlis/cookieOptions.js";
 
 export const registerUser = async (req, res) => {
     try {
@@ -12,13 +13,13 @@ export const registerUser = async (req, res) => {
         if(userExists) return res.status(400).json({message: "You already have an account"});
         const avatar = await uploadOnCloudinary(avatarLocalFilePath);
         if(!avatar) return res.status(400).json({message: "Avatar failed to upload"});
-        const createdUser = await userModel.create({fullName, email, password, avatar: avatar.url});
+        const createdUser = await userModel.create({fullName, email, password, avatar: avatar.secure_url});
         const newUser = await userModel.findOne({_id: createdUser._id}).select("-password -refreshToken");
         const {accessToken, refreshToken} = await generateAccessAndRefreshToken(createdUser);
         return res
         .status(201)
-        .cookie("accessToken", accessToken)
-        .cookie("refreshToken", refreshToken)
+        .cookie("accessToken", accessToken, cookieOptions.accessToken)
+        .cookie("refreshToken", refreshToken, cookieOptions.refreshToken)
         .json({
             message: "Your account has been created",
             newUser
@@ -42,8 +43,8 @@ export const loginUser = async (req, res) => {
      const loginUser = await userModel.findById(user._id).select("-password -refreshToken");
      return res
      .status(200)
-     .cookie("accessToken", accessToken)
-     .cookie("refreshToken", refreshToken)
+     .cookie("accessToken", accessToken, cookieOptions.accessToken)
+     .cookie("refreshToken", refreshToken, cookieOptions.refreshToken)
      .json({
         message: "Successfully login",
         loginUser
@@ -104,11 +105,13 @@ export const updateProfile = async (req, res) => {
         $set: {
           fullName: fullName?.trim() || user.fullName,
           email: email?.trim() || user.email,
-          avatar: newAvatar?.url || user.avatar,
+          avatar: newAvatar?.secure_url || user.avatar,
         },
       },
       { new: true }
     );
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(updatedUser);
 
     if (newAvatar?.url && updatedUser) {
       await deleteImgOnCloudinary(user.avatar);
@@ -116,7 +119,11 @@ export const updateProfile = async (req, res) => {
 
     const newUser = await userModel.findById(updatedUser._id).select("-password -refreshToken");
 
-    return res.status(200).json({
+    return res
+    .status(200)
+    .cookie("accessToken", accessToken, cookieOptions.accessToken)
+    .cookie("refreshToken", refreshToken, cookieOptions.refreshToken)
+    .json({
       message: "Profile updated successfully",
       updatedUser: newUser
     });
@@ -131,8 +138,8 @@ export const logOut = async (req, res) => {
       await userModel.findOneAndUpdate({email: req.user.email}, {$unset: {refreshToken: 1}}, {new: true});
       return res
       .status(200)
-      .clearCookie("accessToken")
-      .clearCookie("refreshToken")
+      .clearCookie("accessToken", cookieOptions.accessToken)
+      .clearCookie("refreshToken", cookieOptions.refreshToken)
       .json({message: "User logout"});
     } catch (err) {
       return res.status(500).json({message: `Failed to logout user ${err.message}`});
