@@ -1,7 +1,7 @@
 
 const isProduction = process.env.NODE_ENV === "production";
 
-module.exports.cookieOptions = {
+export const cookieOptions = {
   accessToken: {
     httpOnly: true,
     secure: isProduction,
