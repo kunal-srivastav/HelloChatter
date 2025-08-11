@@ -1,5 +1,5 @@
 
-export const Base_url = "http://localhost:4000/api/v1"
+export const Base_url = process.env.BASE_URL;
 
 export const uiState = {
     error: null,
