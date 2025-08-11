@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Base_url } from "../../utils/extraReducers";
 import axios from "axios";
+console.log(Base_url);
 
 export const registerUser = createAsyncThunk("/users/register", 
     async(userData , {rejectWithValue}) => {
