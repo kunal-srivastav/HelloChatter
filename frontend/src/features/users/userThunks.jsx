@@ -2,9 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Base_url } from "../../utils/extraReducers.jsx";
 import axios from "axios";
 
-
-console.log("Base_ ufur", Base_url)
-
 export const registerUser = createAsyncThunk("/users/register", 
     async(userData , {rejectWithValue}) => {
         try {
