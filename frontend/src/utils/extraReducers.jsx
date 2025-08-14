@@ -1,5 +1,5 @@
 
-export const Base_url = import.meta.env.BASE_URL;
+export const Base_url = import.meta.env.VITE_BASE_URL;
 
 export const uiState = {
     error: null,
