@@ -5,11 +5,9 @@ import axios from "axios";
 export const registerUser = createAsyncThunk("/users/register", 
     async(userData , {rejectWithValue}) => {
         try {
-            console.log(userData);
             const res = await axios.post(`${Base_url}/users/register`, userData, {withCredentials: true});
             return res.data;
         } catch (err) {
-            console.log("User thunk err", err);
             return rejectWithValue(err?.response?.data?.message || "Registration failed")
         }
 });
