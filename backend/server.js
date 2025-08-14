@@ -28,7 +28,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(path.resolve(), "public")));
-app.get('*', (req, res) => res.sendFile('index.html'));
 
 export const userSocketMap = new Map();
 
