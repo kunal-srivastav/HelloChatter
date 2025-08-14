@@ -6,7 +6,6 @@ import { cookieOptions } from "../utlis/cookieOptions.js";
 export const registerUser = async (req, res) => {
     try {
         const { fullName, email, password } = req.body;
-        console.log(req.body);
         const avatarLocalFilePath = req.file?.path;
         if(!avatarLocalFilePath) return res.status(400).json({message: "Avatar is required"});
         if(!(fullName || email || password)) return res.status(400).json({message: "All fields are required"});
@@ -27,7 +26,6 @@ export const registerUser = async (req, res) => {
         })
 
     } catch (err) {
-      console.log("user registered err ", err);
         return res.status(500).json({message : `Internal server error`});
     }
 };

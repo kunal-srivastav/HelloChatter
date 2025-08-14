@@ -29,7 +29,7 @@ function Register() {
       userData.append("avatar", avatarRef.current.files[0]);
       userData.append("fullName", formData.fullName);
       userData.append("email", formData.email);
-      if(userId) {
+      if(!userId) {
         userData.append("password", formData.password);
       }
       if(userId) {
