@@ -1,6 +1,5 @@
 
 export const Base_url = import.meta.env.VITE_BASE_URL;
-console.log("base url in reducer" ,Base_url);
 
 export const uiState = {
     error: null,

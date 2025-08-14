@@ -2,11 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Base_url } from "../../utils/extraReducers.jsx";
 import axios from "axios";
 
-console.log("Base url", Base_url);
-
 export const registerUser = createAsyncThunk("/users/register", 
     async(userData , {rejectWithValue}) => {
         try {
+            console.log(userData);
             const res = await axios.post(`${Base_url}/users/register`, userData, {withCredentials: true});
             return res.data;
         } catch (err) {
