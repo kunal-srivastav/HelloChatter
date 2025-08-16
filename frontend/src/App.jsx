@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Routes, Route} from "react-router-dom"
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -13,13 +13,23 @@ function App() {
 
   const { loggedInUser } = useSelector(state => state.users);
   const dispatch = useDispatch();
+  const [userChecked, setUserChecked] = useState(false);
 
-  useEffect(() => {
-    dispatch(getCurrentUser());
-    setTimeout(() => {
-      dispatch(setClearMsg());
-    }, 3000);
-  }, [dispatch]);
+useEffect(() => {
+  if (!userChecked) {
+    dispatch(getCurrentUser())
+      .finally(() => setUserChecked(true));
+  }
+}, [dispatch, userChecked]);
+
+// clear messages after 3s
+useEffect(() => {
+  const timer = setTimeout(() => {
+    dispatch(setClearMsg());
+  }, 3000);
+  return () => clearTimeout(timer);
+}, [dispatch]);
+
 
   useEffect(() => {
     if (loggedInUser) {
@@ -34,9 +44,9 @@ function App() {
           <Route path='/register' element={< Register />} />
             {loggedInUser && (
               <>
-              <Route path='/:userId/update-profile' element={loggedInUser ? <Register /> : ""} />
-              <Route path='/chat' element={loggedInUser ? <ChatRoom /> : ""} />
-              <Route path='/:remoteUserId/video-call' element={loggedInUser ? <VideoCall /> : ""} />        
+              <Route path='/:userId/update-profile' element={loggedInUser && <Register />} />
+              <Route path='/chat' element={loggedInUser && <ChatRoom />} />
+              <Route path='/:remoteUserId/video-call' element={loggedInUser && <VideoCall /> } />        
               </>
             )}
       </Routes>
